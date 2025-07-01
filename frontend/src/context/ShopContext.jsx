@@ -7,7 +7,8 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
   const currency = '₹';
-  const delivery_fee = 10;
+  let delivery_fee = 80;
+
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -56,6 +57,11 @@ const ShopContextProvider = (props) => {
     }
     return totalAmount;
   };
+
+  let subtotal = getCartAmount();
+  if (subtotal >= 500) {
+    delivery_fee = 0;
+  }
 
   const updateQuantity = async (itemID, quantity) => {
     if (!itemID) {

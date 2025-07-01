@@ -5,6 +5,7 @@ import Title from './Title';
 function CartTotal() {
   const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
   const subtotal = getCartAmount();
+  
   const total = subtotal === 0 ? 0 : subtotal + delivery_fee;
 
   return (
@@ -20,6 +21,7 @@ function CartTotal() {
         <hr />
         <div className='flex justify-between'>
           <p>Shipping Fees</p>
+          <p>*Only Applied on orders below ₹500</p>
           <p>{currency} {delivery_fee}.00</p>
         </div>
         <hr />

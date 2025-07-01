@@ -26,7 +26,6 @@ const List = ({ token }) => {
         backendUrl + "/api/product/remove",
         { id },
         { headers: { Authorization: `Bearer ${token}` } }
-
       );
       if (response.data.success) {
         toast.success(response.data.message);
@@ -45,26 +44,24 @@ const List = ({ token }) => {
   }, []);
 
   return (
-    <>
-      <p className="text-2xl font-bold mb-5 text-gray-800 px-4 md:px-8">
-        All Products List
-      </p>
+    <div className="px-4 py-6 sm:px-8 lg:px-16 bg-gray-50 min-h-screen">
+      <p className="text-3xl font-bold mb-6 text-gray-800">All Products List</p>
 
-      <div className="flex flex-col gap-3 w-full px-4 md:px-8">
-        {/* ------------- List Table Title --------------- */}
-        <div className="hidden md:grid w-full grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-3 px-5 border rounded-lg bg-gray-100 text-sm text-gray-700 font-semibold shadow">
-          <span className="text-left">Image</span>
+      <div className="flex flex-col gap-4 w-full">
+        {/* Header Row (Hidden on Mobile) */}
+        <div className="hidden md:grid w-full grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-3 px-5 border rounded-lg bg-gray-100 text-sm text-gray-700 font-semibold shadow-sm">
+          <span>Image</span>
           <span>Name</span>
           <span>Category</span>
           <span>Price</span>
           <span className="text-center">Action</span>
         </div>
 
-        {/* ----------- Product List ----------- */}
+        {/* Product Rows */}
         {list.map((item, index) => (
           <div
             key={index}
-            className="w-full grid grid-cols-2 md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-4 py-4 px-5 border rounded-lg bg-white shadow-sm text-sm text-gray-800 hover:shadow-md transition-all"
+            className="w-full grid grid-cols-2 md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-4 py-4 px-5 border rounded-xl bg-white shadow-sm text-sm text-gray-800 hover:shadow-md transition-all duration-200"
           >
             <img
               className="w-14 h-14 object-cover rounded-md border"
@@ -77,13 +74,17 @@ const List = ({ token }) => {
               {currency}
               {item.price}
             </p>
-            <p onClick={() => removeProduct(item)} className="text-right md:text-center text-red-500 hover:text-red-600 cursor-pointer text-lg font-bold">
+            <p
+              onClick={() => removeProduct(item._id)}
+              className="text-right md:text-center text-red-500 hover:text-red-600 cursor-pointer text-xl font-bold"
+              title="Delete"
+            >
               ×
             </p>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
