@@ -58,19 +58,30 @@ const ShopContextProvider = (props) => {
   };
 
   const updateQuantity = async (itemID, quantity) => {
+    if (!itemID) {
+      console.error("❌ updateQuantity called without itemID");
+      return;
+    }
+
     let cartData = structuredClone(cartItems);
     cartData[itemID] = quantity;
     setCartItems(cartData);
 
     if (token) {
       try {
-        await axios.post(backendUrl + 'api/cart/update', { itemID, quantity }, { headers: { token } })
+        await axios.post(`${backendUrl}/api/cart/update`, {
+          itemId: itemID,
+          quantity
+        }, {
+          headers: { token }
+        });
       } catch (error) {
-        console.log(error)
-        toast.error(error.message)
+        console.log(error);
+        toast.error(error.message);
       }
     }
   };
+
 
   const getProductsData = async () => {
     try {
