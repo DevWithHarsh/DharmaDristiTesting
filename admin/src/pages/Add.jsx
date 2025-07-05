@@ -14,35 +14,9 @@ const Add = ({ token }) => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
-  const [category, setCategory] = useState('Statues');
-  const [subCategory, setSubCategory] = useState('');
-
+  const [category, setCategory] = useState('Men');
+  const [subCategory, setSubCategory] = useState('Topwear');
   const [bestseller, setBestseller] = useState(false);
-
-  // Subcategories mapping
-  const subCategories = {
-    Statues: [
-      'God Statues',
-      'Goddess Statues',
-      'Brass Idols',
-      'Marble Statues',
-      'Panchaloha Statues',
-    ],
-    Yantras: [
-      'Shri Yantra',
-      'Kuber Yantra',
-      'Vastu Yantra',
-      'Navgraha Yantra',
-      'Hanuman Yantra',
-    ],
-    Mala: [
-      'Rudraksha Mala',
-      'Tulsi Mala',
-      'Crystal Mala',
-      'Sandalwood Mala',
-      'Lotus Seed Mala',
-    ],
-  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -82,9 +56,8 @@ const Add = ({ token }) => {
         setImage3(false);
         setImage4(false);
         setBestseller(false);
-        setSubCategory('');
       } else {
-        toast.error(response.data.message || 'Failed to add product');
+        toast.error(response.data.message || "Failed to add product");
       }
     } catch (error) {
       console.error('Add Product Error:', error);
@@ -93,11 +66,7 @@ const Add = ({ token }) => {
   };
 
   return (
-    <form
-      onSubmit={onSubmitHandler}
-      className="flex flex-col w-full items-start gap-3"
-    >
-      {/* Image Upload */}
+    <form onSubmit={onSubmitHandler} className="flex flex-col w-full items-start gap-3">
       <div>
         <p className="mb-2">Upload Image</p>
         <div className="flex gap-2">
@@ -125,7 +94,6 @@ const Add = ({ token }) => {
         </div>
       </div>
 
-      {/* Product Name */}
       <div className="w-full">
         <p className="mb-2">Product name</p>
         <input
@@ -138,7 +106,6 @@ const Add = ({ token }) => {
         />
       </div>
 
-      {/* Description */}
       <div className="w-full">
         <p className="mb-2">Product description</p>
         <textarea
@@ -150,26 +117,20 @@ const Add = ({ token }) => {
         />
       </div>
 
-      {/* Category & Subcategory & Price */}
       <div className="flex flex-col sm:flex-row gap-4 w-full">
-        {/* Category */}
         <div>
           <p className="mb-2">Product category</p>
           <select
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setSubCategory('');
-            }}
+            onChange={(e) => setCategory(e.target.value)}
             value={category}
             className="px-3 py-2 border"
           >
-            <option value="Statues">Statues</option>
-            <option value="Yantras">Yantras</option>
-            <option value="Mala">Mala</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Kids">Kids</option>
           </select>
         </div>
 
-        {/* Subcategory */}
         <div>
           <p className="mb-2">Sub category</p>
           <select
@@ -177,16 +138,12 @@ const Add = ({ token }) => {
             value={subCategory}
             className="px-3 py-2 border"
           >
-            <option value="">Select Subcategory</option>
-            {subCategories[category].map((sub, index) => (
-              <option key={index} value={sub}>
-                {sub}
-              </option>
-            ))}
+            <option value="Topwear">Topwear</option>
+            <option value="Bottomwear">Bottomwear</option>
+            <option value="Winterwear">Winterwear</option>
           </select>
         </div>
 
-        {/* Price */}
         <div>
           <p className="mb-2">Product Price</p>
           <input
@@ -200,7 +157,6 @@ const Add = ({ token }) => {
         </div>
       </div>
 
-      {/* Bestseller checkbox */}
       <div className="flex items-center gap-2 mt-2">
         <input
           type="checkbox"
@@ -208,12 +164,9 @@ const Add = ({ token }) => {
           checked={bestseller}
           onChange={() => setBestseller((prev) => !prev)}
         />
-        <label htmlFor="bestseller" className="cursor-pointer">
-          Add to bestseller
-        </label>
+        <label htmlFor="bestseller" className="cursor-pointer">Add to bestseller</label>
       </div>
 
-      {/* Submit button */}
       <button type="submit" className="w-20 py-3 mt-4 bg-black text-white">
         ADD
       </button>
