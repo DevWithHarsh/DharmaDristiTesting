@@ -95,7 +95,6 @@ const Navbar = () => {
           {token && dropdownOpen && (
             <div className='absolute right-0 pt-4 z-50'>
               <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md'>
-                <p className='cursor-pointer hover:text-[#c95c2d]'>My Profile</p>
                 <p
                   onClick={() => {
                     navigate('/orders');
