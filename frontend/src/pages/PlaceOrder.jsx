@@ -113,7 +113,6 @@ const PlaceOrder = () => {
                     <Title text1={'PAYMENT'} text2={'METHOD'} />
                     <div className="flex flex-col lg:flex-row gap-4 w-full">
                         {[
-                            { key: 'stripe', label: 'Stripe', logo: assets.stripe_logo },
                             { key: 'razorpay', label: 'Razorpay', logo: assets.razorpay_logo },
                             { key: 'cod', label: 'Cash on Delivery', logo: null },
                         ].map(({ key, label, logo }) => (
