@@ -54,14 +54,16 @@ const PlaceOrder = () => {
             switch (method) {
                 // API calls for COD
                 case 'cod':
-                    const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } })
+                    const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
                     if (response.data.success) {
-                        setCartItems({})
-                        navigate('/orders')
+                        await axios.post(backendUrl + '/api/cart/clear', {}, { headers: { token } }); // 🚀 FIX HERE
+                        setCartItems({});
+                        navigate('/orders');
                     } else {
-                        toast.error(response.data.message)
+                        toast.error(response.data.message);
                     }
                     break;
+
 
                 default:
                     break;
@@ -70,7 +72,7 @@ const PlaceOrder = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-            
+
         }
     }
 
@@ -113,7 +115,6 @@ const PlaceOrder = () => {
                     <Title text1={'PAYMENT'} text2={'METHOD'} />
                     <div className="flex flex-col lg:flex-row gap-4 w-full">
                         {[
-                            { key: 'stripe', label: 'Stripe', logo: assets.stripe_logo },
                             { key: 'razorpay', label: 'Razorpay', logo: assets.razorpay_logo },
                             { key: 'cod', label: 'Cash on Delivery', logo: null },
                         ].map(({ key, label, logo }) => (

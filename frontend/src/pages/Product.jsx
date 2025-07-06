@@ -25,7 +25,7 @@ function Product() {
   }, [productId])
 
   return productData ? (
-    <div className='border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100'>
+    <div className='border-t-1 pt-10 transition-opacity ease-in duration-500 opacity-100'>
       <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
 
         {/* Image Section */}
@@ -80,18 +80,6 @@ function Product() {
           </div>
         </div>
       </div>
-      {/* ------- Description & Review Section --------------*/}
-      <div className='mt-20'>
-          <div className='flex'>
-              <b className='border px-5 py-3 text-sm'>Description</b>
-              <p className='border px-5 py-3 text-sm'>Reviews (122)</p>
-          </div>
-          <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500'>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque est a quod suscipit. Deserunt, a!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos reprehenderit ipsam laboriosam, id perspiciatis harum?</p>
-          </div>
-      </div>
-
       {/* --------- display related products --------- */}
 
       <RelatedProducts category={productData.category} subCategory={productData.subCategory}/>
