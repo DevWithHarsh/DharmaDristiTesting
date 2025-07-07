@@ -61,14 +61,7 @@ function Product() {
         {/* Product Info */}
         <div className='flex-1'>
           <h1 className='font-medium text-2xl mt-2'>{productData.name}</h1>
-          <div className='flex items-center gap-1 mt-2'>
-            <img className='w-3.5' src={assets.star_icon} alt="star" />
-            <img className='w-3.5' src={assets.star_icon} alt="star" />
-            <img className='w-3.5' src={assets.star_icon} alt="star" />
-            <img className='w-3.5' src={assets.star_icon} alt="star" />
-            <img className='w-3.5' src={assets.star_dull_icon} alt="star-dull" />
-            <p className='pl-2'>(122)</p>
-          </div>
+
           <p className='mt-5 text-3xl font-medium'>{currency}{productData.price}</p>
           <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
           <button onClick={()=>addToCart(productData._id)} className='bg-black text-white mt-5 px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART</button>
