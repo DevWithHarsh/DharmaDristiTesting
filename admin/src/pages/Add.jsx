@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 
 
 const Add = ({ token }) => {
-  const [stock, setStock] = useState('');
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -92,7 +91,6 @@ const Add = ({ token }) => {
       formData.append('category', category);
       formData.append('subCategory', subCategory);
       formData.append('bestseller', bestseller);
-      formData.append('stock', stock);
 
 
       if (image1) formData.append('image1', image1);
@@ -239,19 +237,6 @@ const Add = ({ token }) => {
             required
           />
         </div>
-      </div>
-
-      {/* Stock */}
-      <div>
-        <p className="mb-2">Stock</p>
-        <input
-          onChange={(e) => setStock(e.target.value)}
-          value={stock}
-          className="px-3 py-2 border w-[120px]"
-          type="number"
-          placeholder="100"
-          required
-        />
       </div>
 
       {/* Bestseller checkbox */}
