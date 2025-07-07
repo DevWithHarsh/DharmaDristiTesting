@@ -1,4 +1,5 @@
 import orderModel from '../models/orderModel.js'
+import productModel from '../models/productModel.js';
 
 const placeOrder = async (req, res) => {
     try {
@@ -11,10 +12,20 @@ const placeOrder = async (req, res) => {
             amount,
             address,
             paymentMethod,
-            payment: paymentMethod !== 'cod' // cod = false, others = true
+            payment: paymentMethod !== 'cod'
         });
 
         await newOrder.save();
+
+        // Reduce stock for each item
+        for (const item of items) {
+            const product = await productModel.findById(item._id);
+            if (product) {
+                product.stock -= item.quantity;
+                if (product.stock < 0) product.stock = 0;
+                await product.save();
+            }
+        }
 
         res.json({ success: true, message: "Order Placed" });
 
@@ -34,7 +45,7 @@ const placeOrderRazorpay = async (req, res) => {
 const allOrders = async (req, res) => {
     try {
         const orders = await orderModel.find({})
-        res.json({success:true,orders})
+        res.json({ success: true, orders })
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
@@ -46,22 +57,22 @@ const userOrders = async (req, res) => {
         const { userId } = req.body
 
         const orders = await orderModel.find({ userId })
-        res.json({success:true,orders})
+        res.json({ success: true, orders })
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
-        
+        res.json({ success: false, message: error.message })
+
     }
 }
 // update order status from admin panel
 const updateStatus = async (req, res) => {
     try {
-        const { orderId, status} = req.body
+        const { orderId, status } = req.body
         await orderModel.findByIdAndUpdate(orderId, { status })
-        res.json({success:true, message: 'Status Updated'})
+        res.json({ success: true, message: 'Status Updated' })
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
+        res.json({ success: false, message: error.message })
     }
 }
 

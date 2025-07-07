@@ -49,19 +49,21 @@ const List = ({ token }) => {
 
       <div className="flex flex-col gap-4 w-full">
         {/* Header Row (Hidden on Mobile) */}
-        <div className="hidden md:grid w-full grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-3 px-5 border rounded-lg bg-gray-100 text-sm text-gray-700 font-semibold shadow-sm">
+        <div className="hidden md:grid w-full grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] items-center py-3 px-5 border rounded-lg bg-gray-100 text-sm text-gray-700 font-semibold shadow-sm">
           <span>Image</span>
           <span>Name</span>
           <span>Category</span>
+          <span>Stock</span>
           <span>Price</span>
           <span className="text-center">Action</span>
         </div>
+
 
         {/* Product Rows */}
         {list.map((item, index) => (
           <div
             key={index}
-            className="w-full grid grid-cols-2 md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-4 py-4 px-5 border rounded-xl bg-white shadow-sm text-sm text-gray-800 hover:shadow-md transition-all duration-200"
+            className="w-full grid grid-cols-2 md:grid-cols-[1fr_2fr_1fr_1fr_1fr_1fr] items-center gap-4 py-4 px-5 border rounded-xl bg-white shadow-sm text-sm text-gray-800 hover:shadow-md transition-all duration-200"
           >
             <img
               className="w-14 h-14 object-cover rounded-md border"
@@ -70,6 +72,7 @@ const List = ({ token }) => {
             />
             <p className="truncate font-medium">{item.name}</p>
             <p className="hidden md:block text-gray-600">{item.category}</p>
+            <p className="hidden md:block text-gray-600">{item.stock}</p>
             <p className="hidden md:block text-gray-600 font-semibold whitespace-nowrap">
               {currency}
               {item.price}
