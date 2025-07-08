@@ -3,13 +3,13 @@ import CartTotal from "../components/CartTotal";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
+import { toast } from "react-toastify";
 
 function Cart() {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-
     if (products.length > 0) {
       const tempData = [];
       for (const items in cartItems) {
@@ -19,8 +19,6 @@ function Cart() {
       }
       setCartData(tempData);
     }
-
-
   }, [cartItems, products]);
 
   return (
@@ -28,6 +26,7 @@ function Cart() {
       <div className="text-2xl mb-3">
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
+
       <div>
         {cartData.map((item, index) => {
           const productData = products.find(product => product._id === item._id);
@@ -56,6 +55,7 @@ function Cart() {
                   </div>
                 </div>
               </div>
+
               <input
                 onChange={(e) =>
                   e.target.value === '' || e.target.value === '0'
@@ -67,6 +67,7 @@ function Cart() {
                 min={1}
                 defaultValue={item.quantity}
               />
+
               <img
                 onClick={() => updateQuantity(item._id, 0)}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"
@@ -77,11 +78,23 @@ function Cart() {
           );
         })}
       </div>
+
       <div className="flex justify-end my-20">
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full text-end">
-            <button onClick={() => navigate('/place-order')} className="bg-black text-sm my-8 px-8 py-3 text-white">
+            <button
+              onClick={() => {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  toast.error("Please login before placing an order.");
+                  navigate("/login");
+                } else {
+                  navigate("/place-order");
+                }
+              }}
+              className="bg-black text-sm my-8 px-8 py-3 text-white"
+            >
               PROCEED TO CHECKOUT
             </button>
           </div>

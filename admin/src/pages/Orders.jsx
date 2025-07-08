@@ -46,6 +46,26 @@ const Orders = ({ token }) => {
     }
   };
 
+  const deleteOrder = async (id) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/order/remove",
+        { id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetchAllOrders();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
+  };
+
+
   useEffect(() => {
     fetchAllOrders();
   }, [token]);
@@ -123,6 +143,13 @@ const Orders = ({ token }) => {
               <option value="Out for Delivery">Out for Delivery</option>
               <option value="Delivered">Delivered</option>
             </select>
+            <p
+              onClick={() => deleteOrder(order._id)}
+              className="text-red-500 hover:text-red-600 font-bold text-xl cursor-pointer text-right md:text-center"
+              title="Delete Order"
+            >
+              ×
+            </p>
           </div>
         ))}
       </div>

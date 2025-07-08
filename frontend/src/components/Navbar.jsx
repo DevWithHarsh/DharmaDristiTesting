@@ -18,8 +18,6 @@ const Navbar = () => {
     setShowProfileMenu(false);
   };
 
-  const location = useLocation();
-  const isCategoryPage = location.pathname === '/categories';
 
   // Close profile menu when clicking outside
   useEffect(() => {
@@ -45,6 +43,9 @@ const Navbar = () => {
         <NavLink to="/categories" className="flex flex-col items-center gap-1">
           <p className="hover:text-[#c95c2d]">Categories</p>
         </NavLink>
+        <NavLink to="/shop" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Shop</p>
+        </NavLink>
         <NavLink to="/about" className="flex flex-col items-center gap-1">
           <p className="hover:text-[#c95c2d]">About</p>
         </NavLink>
@@ -54,14 +55,12 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6">
-        {isCategoryPage && (
           <img
             onClick={() => setShowSearch(true)}
             src={assets.search_icon}
             className="w-4 cursor-pointer"
             alt="search"
           />
-        )}
 
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>
