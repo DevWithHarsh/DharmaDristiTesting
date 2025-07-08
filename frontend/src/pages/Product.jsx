@@ -6,7 +6,7 @@ import RelatedProducts from '../components/RelatedProducts'
 
 function Product() {
   const { productId } = useParams()
-  const { products, currency,addToCart } = useContext(ShopContext)
+  const { products, currency, addToCart } = useContext(ShopContext)
   const [productData, setProductData] = useState(null)
   const [image, setImage] = useState('')
 
@@ -64,7 +64,19 @@ function Product() {
 
           <p className='mt-5 text-3xl font-medium'>{currency}{productData.price}</p>
           <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
-          <button onClick={()=>addToCart(productData._id)} className='bg-black text-white mt-5 px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART</button>
+          {
+            productData.stock > 1 ? (
+              <button
+                onClick={() => addToCart(productData._id)}
+                className="bg-black text-white mt-5 px-8 py-3 text-sm active:bg-gray-700"
+              >
+                ADD TO CART
+              </button>
+            ) : (
+              <p className="text-red-600 mt-5 font-semibold text-lg">Out of Stock</p>
+            )
+          }
+
           <hr className='mt-8 sm:w-4/5' />
           <div className='text-sm text-gray-500 mt-5 felx flex-col gap-1'>
             <p>100% Original product.</p>
@@ -75,7 +87,7 @@ function Product() {
       </div>
       {/* --------- display related products --------- */}
 
-      <RelatedProducts category={productData.category} subCategory={productData.subCategory}/>
+      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
 
     </div>
   ) : <div className='opacity-0'></div>

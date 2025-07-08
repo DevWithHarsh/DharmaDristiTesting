@@ -30,7 +30,7 @@ const PlaceOrder = () => {
     }
 
     const onSubmitHandler = async (event) => {
-        event.preventDefault()
+        // event.preventDefault()
         try {
             let orderItems = []
 
@@ -59,6 +59,7 @@ const PlaceOrder = () => {
                         await axios.post(backendUrl + '/api/cart/clear', {}, { headers: { token } }); // 🚀 FIX HERE
                         setCartItems({});
                         navigate('/orders');
+                        toast.success(response.data.message);
                     } else {
                         toast.error(response.data.message);
                     }
