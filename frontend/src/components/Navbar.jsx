@@ -55,12 +55,12 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6">
-          <img
-            onClick={() => setShowSearch(true)}
-            src={assets.search_icon}
-            className="w-4 cursor-pointer"
-            alt="search"
-          />
+        <img
+          onClick={() => setShowSearch(true)}
+          src={assets.search_icon}
+          className="w-4 cursor-pointer"
+          alt="search"
+        />
 
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>
@@ -114,9 +114,8 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-[#f8eddf] transition-all ${
-          visible ? 'w-full' : 'w-0'
-        } sm:hidden`}
+        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-[#f8eddf] transition-all ${visible ? 'w-full' : 'w-0'
+          } sm:hidden`}
       >
         <div className="flex flex-col text-gray-600">
           <div
@@ -139,6 +138,13 @@ const Navbar = () => {
             to="/categories"
           >
             Categories
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
+            to="/shop"
+          >
+            Shop
           </NavLink>
           <NavLink
             onClick={() => setVisible(false)}
