@@ -4,6 +4,7 @@ import Title from '../components/Title';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function Orders() {
   const { backendUrl, token, currency } = useContext(ShopContext);
@@ -26,6 +27,7 @@ function Orders() {
             item['paymentMethod'] = order.paymentMethod
             item['date'] = order.date
             allOrdersItem.push(item)
+            toast.success("Order Status: "+order.status);
           })
         })
         setorderData(allOrdersItem.reverse())
