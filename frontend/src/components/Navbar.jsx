@@ -7,6 +7,7 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileRef = useRef();
+  const { wishlistItems } = useContext(ShopContext);
 
   const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
 
@@ -51,6 +52,9 @@ const Navbar = () => {
         </NavLink>
         <NavLink to="/contact" className="flex flex-col items-center gap-1">
           <p className="hover:text-[#c95c2d]">Contact</p>
+        </NavLink>
+        <NavLink to="/orders" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Orders</p>
         </NavLink>
       </ul>
 
@@ -102,6 +106,14 @@ const Navbar = () => {
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
             {getCartCount()}
           </p>
+        </Link>
+        <Link to="/wishlist" className="relative">
+          <img src={assets.heart_icon} className="w-5" alt="wishlist" />
+          {wishlistItems?.length > 0 && (
+            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-pink-500 text-white aspect-square rounded-full text-[8px]">
+              {wishlistItems.length}
+            </p>
+          )}
         </Link>
 
         <img
@@ -159,6 +171,13 @@ const Navbar = () => {
             to="/contact"
           >
             Contact
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
+            to="/orders"
+          >
+            Orders
           </NavLink>
         </div>
       </div>

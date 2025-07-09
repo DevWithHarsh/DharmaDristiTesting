@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 const ProductItem = ({ id, image, name, price }) => {
   const { addToCart } = useContext(ShopContext);
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, wishlistItems } = useContext(ShopContext);
+  const isWishlisted = wishlistItems.includes(id);
 
   const handleBuyNow = async () => {
     try {
@@ -42,7 +44,11 @@ const ProductItem = ({ id, image, name, price }) => {
       >
         Buy Now
       </button>
-
+      <button onClick={() =>
+        isWishlisted ? removeFromWishlist(id) : addToWishlist(id)
+      }>
+        {isWishlisted ? '❤️' : '🤍'}
+      </button>
     </div>
   );
 };

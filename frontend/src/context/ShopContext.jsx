@@ -16,6 +16,31 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState('')
   const navigate = useNavigate();
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  const addToWishlist = async itemId => {
+    if (!wishlistItems.includes(itemId)) {
+      setWishlistItems(prev => [...prev, itemId]);
+      toast.success("Added to wishlist!");
+      if (token) {
+        await axios.post(`${backendUrl}/api/user/wishlist/add`, { itemId }, { headers: { token } });
+      }
+    }
+  };
+
+  const removeFromWishlist = async itemId => {
+    setWishlistItems(prev => prev.filter(id => id !== itemId));
+    toast.info("Removed from wishlist!");
+    if (token) {
+      await axios.post(`${backendUrl}/api/user/wishlist/remove`, { itemId }, { headers: { token } });
+    }
+  };
+
+  const getUserWishlist = async token => {
+    const res = await axios.post(`${backendUrl}/api/user/wishlist`, {}, { headers: { token } });
+    if (res.data.success) setWishlistItems(res.data.wishlist);
+  };
+
 
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems);
@@ -126,6 +151,7 @@ const ShopContextProvider = (props) => {
     if (!token && localToken) {
       setToken(localToken);
       getUserCart(localToken); // ✅ fetch cart on load
+      getUserWishlist(localToken); // ✅ load wishlist
     }
   }, []);
 
@@ -135,7 +161,10 @@ const ShopContextProvider = (props) => {
     cartItems, setCartItems, addToCart,
     getCartCount, updateQuantity, getCartAmount,
     navigate, backendUrl,
-    setToken, token
+    setToken, token,
+    wishlistItems,
+    addToWishlist,
+    removeFromWishlist,
   };
 
   return (

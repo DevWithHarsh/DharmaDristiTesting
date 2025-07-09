@@ -7,6 +7,29 @@ const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET)
 }
 
+const getWishlist = async (req, res) => {
+    const user = await userModel.findById(req.body.userId);
+    res.json({ success: true, wishlist: user.wishlist || [] });
+};
+
+const addWishlist = async (req, res) => {
+    const { userId, itemId } = req.body;
+    const user = await userModel.findById(userId);
+    if (!user.wishlist.includes(itemId)) {
+        user.wishlist.push(itemId);
+        await user.save();
+    }
+    res.json({ success: true, wishlist: user.wishlist });
+};
+
+const removeWishlist = async (req, res) => {
+    const { userId, itemId } = req.body;
+    const user = await userModel.findById(userId);
+    user.wishlist = user.wishlist.filter(id => id !== itemId);
+    await user.save();
+    res.json({ success: true, wishlist: user.wishlist });
+};
+
 // Routes for user login
 const loginUser = async (req, res) => {
 
@@ -78,25 +101,25 @@ const registerUser = async (req, res) => {
 }
 // Routes for admin login
 const adminLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-      const token = jwt.sign(
-        { email, role: 'admin' },
-        process.env.JWT_SECRET,
-        { expiresIn: '1d' }
-      );
+        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+            const token = jwt.sign(
+                { email, role: 'admin' },
+                process.env.JWT_SECRET,
+                { expiresIn: '1d' }
+            );
 
-      return res.json({ success: true, token });
-    } else {
-      return res.json({ success: false, message: 'Invalid credentials' });
+            return res.json({ success: true, token });
+        } else {
+            return res.json({ success: false, message: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.log('Admin login error:', error.message);
+        res.json({ success: false, message: error.message });
     }
-  } catch (error) {
-    console.log('Admin login error:', error.message);
-    res.json({ success: false, message: error.message });
-  }
 };
 
 
-export { loginUser, registerUser, adminLogin }
+export { loginUser, registerUser, adminLogin, addWishlist,getWishlist,removeWishlist }
