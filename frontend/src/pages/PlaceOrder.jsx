@@ -9,7 +9,19 @@ import { toast } from "react-toastify";
 const PlaceOrder = () => {
 
     const [method, setMethod] = useState('cod');
-    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext)
+    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products,clearCart } = useContext(ShopContext)
+    const subtotal = getCartAmount();
+    const total = subtotal === 0 ? 0 : subtotal + delivery_fee;
+    // Sample values - you can make these dynamic
+    const upiId = '7984579221@fam';
+    const name = 'To Dharmadristi'; // optional
+    const amount = total.toFixed(2); // total from cart
+    const currency = 'INR';
+
+    // Create UPI deep link
+    const upiLink = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=${currency}`;
+    const qrURL = `https://quickchart.io/qr?text=${encodeURIComponent(upiLink)}`;
+
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -21,6 +33,8 @@ const PlaceOrder = () => {
         zipcode: '',
         country: '',
         phone: '',
+        upiConfirmed: false, // ✅ added
+
     })
 
     const onChangeHandler = (event) => {
@@ -57,6 +71,7 @@ const PlaceOrder = () => {
                     const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
                     if (response.data.success) {
                         await axios.post(backendUrl + '/api/cart/clear', {}, { headers: { token } }); // 🚀 FIX HERE
+                        clearCart(); // <-- call context function to empty cart state
                         setCartItems({});
                         navigate('/orders');
                         toast.success(response.data.message);
@@ -65,6 +80,23 @@ const PlaceOrder = () => {
                     }
                     break;
 
+                case 'upi':
+                    if (!formData.upiConfirmed) {
+                        toast.error("Please confirm that UPI payment is done");
+                        return;
+                    }
+
+                    const upiResponse = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
+                    if (upiResponse.data.success) {
+                        await axios.post(backendUrl + '/api/cart/clear', {}, { headers: { token } });
+                        setCartItems({});
+                        clearCart(); // <-- call context function to empty cart state
+                        navigate('/orders');
+                        toast.success("Order placed via UPI");
+                    } else {
+                        toast.error(upiResponse.data.message);
+                    }
+                    break;
 
                 default:
                     break;
@@ -116,7 +148,7 @@ const PlaceOrder = () => {
                     <Title text1={'PAYMENT'} text2={'METHOD'} />
                     <div className="flex flex-col lg:flex-row gap-4 w-full">
                         {[
-                            { key: 'razorpay', label: 'Razorpay', logo: assets.razorpay_logo },
+                            { key: 'upi', label: 'UPI', logo: assets.upi_logo }, // 👈 Add your QR image here
                             { key: 'cod', label: 'Cash on Delivery', logo: null },
                         ].map(({ key, label, logo }) => (
                             <div
@@ -152,6 +184,26 @@ const PlaceOrder = () => {
                             </div>
                         ))}
                     </div>
+                    {method === 'upi' && (
+                        <div className="mt-6 text-center">
+                            <img
+                                src={qrURL}
+                                alt="UPI QR Code"
+                                className="w-60 h-60 mx-auto mb-4 border rounded"
+                            />
+                            <label className="inline-flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    required
+                                    onChange={(e) =>
+                                        setFormData((data) => ({ ...data, upiConfirmed: e.target.checked }))
+                                    }
+                                />
+                                <span className="text-sm">I have completed the UPI payment of ₹{amount}</span>
+
+                            </label>
+                        </div>
+                    )}
                     <div className="w-full text-end mt-8">
                         <button type='submit' className="bg-black text-white px-16 py-3 text-sm">PLACE ORDER</button>
                     </div>

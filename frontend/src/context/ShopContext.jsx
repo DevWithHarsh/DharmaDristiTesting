@@ -142,6 +142,12 @@ const ShopContextProvider = (props) => {
     }
   }
 
+  const clearCart = () => {
+    setCartItems({});
+    localStorage.removeItem('cartData');
+  };
+
+
   useEffect(() => {
     getProductsData()
   }, [])
@@ -165,6 +171,7 @@ const ShopContextProvider = (props) => {
     wishlistItems,
     addToWishlist,
     removeFromWishlist,
+    clearCart,
   };
 
   return (
