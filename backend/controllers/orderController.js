@@ -27,13 +27,19 @@ const placeOrder = async (req, res) => {
             }
         }
 
-        res.json({ success: true, message: "Order Confirmation Pending" });
+        res.json({ success: true, message: "Order Placed" });
 
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
+
+
+// Placing orders using razorpay
+const placeOrderRazorpay = async (req, res) => {
+
+}
 
 // All orders data for admin panel
 const allOrders = async (req, res) => {
@@ -87,4 +93,4 @@ const removeOrder = async (req, res) => {
     }
 };
 
-export { placeOrder, allOrders, userOrders, updateStatus, removeOrder }
+export { placeOrder, placeOrderRazorpay, allOrders, userOrders, updateStatus, removeOrder }

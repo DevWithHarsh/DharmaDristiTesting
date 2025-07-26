@@ -136,8 +136,8 @@ const Orders = ({ token }) => {
               onChange={(event) => statusHandler(event, order._id)}
               value={order.status}
               className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-            >  
-              <option value="Order Confirmation Pending">Order Confirmation Pending</option>
+            >
+              <option value="Order Placed">Order Placed</option>
               <option value="Packing">Packing</option>
               <option value="Shipped">Shipped</option>
               <option value="Out for Delivery">Out for Delivery</option>
