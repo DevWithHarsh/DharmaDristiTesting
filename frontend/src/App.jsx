@@ -16,6 +16,7 @@ import SearchBar from './components/SearchBar'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Wishlist from './pages/Wishlist'
+import OurPolicy from './components/OurPolicy'
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           <Route path='/place-order' element={<PlaceOrder />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/wishlist' element={<Wishlist />} />
+          <Route path="/privacy" element={<OurPolicy />} />
         </Routes>
         <Footer />
       </div>

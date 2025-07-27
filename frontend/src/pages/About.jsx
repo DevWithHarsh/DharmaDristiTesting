@@ -7,45 +7,45 @@ const About = () => {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-[#a24e3c] mb-6">About Us</h1>
           <p className="text-lg mb-6 leading-relaxed">
-            At{""}
-            <span className="font-semibold text-[#a24e3c]">DharmaDristi</span>,
-            we are on a mission to reconnect modern lives with the timeless wisdom of Sanatan Dharma. Our platform is dedicated to offering authentic, high-quality spiritual products that uphold the purity, tradition, and sacredness of Indian rituals.
-
-            Rooted in devotion and driven by purpose, DharmaDristi brings you carefully curated pooja essentials, crafted by skilled artisans and blessed with spiritual intent. Whether you're preparing for daily prayers, festivals, havans, or temple offerings, we ensure every item reflects purity, tradition, and respect for sacred practices.
+            Welcome to {""}
+            <span className="font-semibold text-[#a24e3c]">DharmaDristi </span>
+            – where tradition meets trust.
           </p>
 
-          <h2 className="text-2xl font-semibold text-[#a24e3c] mb-4">
-            Our Purpose
-          </h2>
-          <p className="mb-6 leading-relaxed">
-            To preserve, promote, and serve the divine traditions of Bharat by making spiritual living easier, accessible, and meaningful in every household.
-          </p>
+          <p className='mb-6'>We believe that every home deserves a touch of spiritual energy, beauty, and positivity. At DharmaDristi, we bring you a curated collection of authentic spiritual products, elegant decor, and artistic creations designed to inspire peace, faith, and harmony in your life.</p>
 
           <h2 className="text-2xl font-semibold text-[#a24e3c] mb-4">
-            What Sets Us Apart
+            ✨ Why Choose DharmaDristi?
           </h2>
           <ul className="list-disc ml-6 mb-6 space-y-2">
-            <ul>✅ Authenticity First – Every product is sourced with care, following Vedic and traditional guidelines</ul>
+            <ul>✅ Authenticity you can trust – Each product is handpicked with care and devotion.</ul>
             <ul>
-              ✅ Eco-Conscious Ethos – Natural, biodegradable, and sustainable materials</ul>
+              ✅ Quality & craftsmanship – From sacred idols to aesthetic decor, we focus on meaningful creations.</ul>
             <ul>
-              ✅ Handcrafted with Devotion – Supporting Indian artisans and sacred craftsmanship</ul>
+              ✅ Easy shopping experience – Simple ordering, Cash on Delivery option, and reliable delivery.</ul>
+
             <ul>
-              ✅ Pan-India Shipping – Safe, fast, and trusted delivery to your doorstep</ul>
-            <ul>
-              ✅ Customer-Centric Service – A spiritual journey backed by a dedicated support team</ul>
+              ✅ Made with faith & love – We understand the spiritual value behind every product.</ul>
           </ul>
 
           <h2 className="text-2xl font-semibold text-[#a24e3c] mb-4">
-            Meet the Visionaries
+            🌸 Our Mission
           </h2>
           <p className="mb-6 leading-relaxed">
-            DharmaDristi was founded by devotees, entrepreneurs, and artisans who deeply believe that purity in worship begins with purity in offerings. Their goal is to restore the sanctity of pooja rituals by delivering products that are not just items, but sacred companions in your spiritual journey.
+            To bring the essence of spirituality, culture, and art into every home while making your shopping experience simple, secure, and satisfying.
           </p>
 
-          <div className="bg-white border border-[#e1c1a1] p-6 rounded-xl shadow-md">
-            <p className="italic text-[#a24e3c]">
-              "Let every offering be pure. Let every prayer be powerful. Let DharmaDristi be your trusted path to divinity."
+          <h2 className="text-2xl font-semibold text-[#a24e3c] mb-4">
+            🏬 From Our Store to Your Door
+          </h2>
+          <p className="mb-6 leading-relaxed">
+            We started as a humble local shop, serving customers with devotion and honesty. Now, through DharmaDristi.com, we deliver the same trust and authenticity to customers across India
+          </p>
+          <p>Whether you are looking for pooja essentials, spiritual gifts, sacred idols, or unique decor, we’re here to help you find something truly meaningful.
+          </p>
+          <div className="bg-white border border-[#e1c1a1] p-6 rounded-xl shadow-md mt-5">
+            <p className="italic text-[#a24e3c] text-center">
+              "DharmaDristi – Bringing Spirituality & Art Closer to You."
             </p>
           </div>
         </div>

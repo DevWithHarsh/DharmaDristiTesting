@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const PlaceOrder = () => {
 
     const [method, setMethod] = useState('cod');
-    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext)
+    const { user, navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext)
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -29,8 +29,70 @@ const PlaceOrder = () => {
         setFormData(data => ({ ...data, [name]: value }))
     }
 
+    const initPay = (order) => {
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: order.amount,
+            currency: order.currency,
+            name: "Order Payment",
+            description: "Order Payment",
+            order_id: order.id,
+            handler: async (response) => {
+                const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
+                try {
+                    // Call verify endpoint after payment
+                    const verifyResponse = await axios.post(
+                        backendUrl + '/api/order/verifyRazorpay',
+                        {
+                            userId: user._id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id,
+                            razorpay_signature,
+                            orderId: orderData._id,
+                            items: order.items,
+                            amount: order.amount,
+                            address: formData
+                        },
+                        { headers: { token } }
+                    );
+
+                    if (verifyResponse.data.success) {
+                        setCartItems({});
+                        navigate('/orders');
+                        toast.success("Payment Successful and Order Placed");
+                    } else {
+                        toast.error("Payment verification failed. Order not placed.");
+                    }
+                } catch (error) {
+                    setCartItems({});
+                    navigate('/orders');
+                    toast.success("Payment Successful and Order Placed");
+                }
+            },
+            modal: {
+                ondismiss: async () => {
+                    try {
+                        // You must pass the orderId in request body
+                        await axios.post(
+                            backendUrl + "/api/order/remove-userOrder",
+                            { id: order.notes.orderId }, // ✅ Send order ID here
+                            { headers: { token } } // ✅ Send headers separately
+                        );
+                        toast.success("Order cancelled successfully");
+                    } catch (error) {
+                        console.error(error);
+                        toast.error(error.response?.data?.message || "Failed to cancel order");
+                    }
+                }
+            }
+
+        };
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+    }
+
     const onSubmitHandler = async (event) => {
-        // event.preventDefault()
+        event.preventDefault()
         try {
             let orderItems = []
 
@@ -65,6 +127,13 @@ const PlaceOrder = () => {
                     }
                     break;
 
+                case 'razorpay':
+                    const razorpayResponse = await axios.post(backendUrl + '/api/order/razorpay', orderData, { headers: { token } });
+                    if (razorpayResponse.data.success) {
+                        initPay(razorpayResponse.data.order);
+                        await axios.post(backendUrl + '/api/cart/clear', {}, { headers: { token } }); // 🚀 FIX HERE
+                    }
+                    break;
 
                 default:
                     break;
@@ -73,7 +142,6 @@ const PlaceOrder = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-
         }
     }
 

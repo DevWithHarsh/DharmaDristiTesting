@@ -7,7 +7,7 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
   const currency = '₹';
-  let delivery_fee = 80;
+  let delivery_fee = 0;
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [search, setSearch] = useState('');
@@ -84,7 +84,7 @@ const ShopContextProvider = (props) => {
   };
 
   let subtotal = getCartAmount();
-  if (subtotal >= 500) {
+  if (subtotal >= 1000) {
     delivery_fee = 0;
   }
 

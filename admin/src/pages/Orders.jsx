@@ -65,7 +65,6 @@ const Orders = ({ token }) => {
     }
   };
 
-
   useEffect(() => {
     fetchAllOrders();
   }, [token]);
@@ -123,6 +122,30 @@ const Orders = ({ token }) => {
                 >
                   {order.payment ? "Done" : "Pending"}
                 </span>
+                {!order.payment && (
+                  <button
+                    className="ml-2 px-2 py-1 bg-green-500 text-white rounded text-xs"
+                    onClick={async () => {
+                      try {
+                        const response = await axios.post(
+                          backendUrl + "/api/order/update-payment",
+                          { orderId: order._id, payment: true },
+                          { headers: { Authorization: `Bearer ${token}` } }
+                        );
+                        if (response.data.success) {
+                          toast.success("Payment marked as Done");
+                          await fetchAllOrders();
+                        } else {
+                          toast.error(response.data.message);
+                        }
+                      } catch (error) {
+                        toast.error(error.message);
+                      }
+                    }}
+                  >
+                    Mark as Done
+                  </button>
+                )}
               </p>
               <p>📅 Date: {new Date(order.date).toLocaleDateString()}</p>
             </div>

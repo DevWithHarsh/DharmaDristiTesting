@@ -109,7 +109,7 @@ const Navbar = () => {
         </Link>
         <Link to="/wishlist" className="relative">
           <img src={assets.heart_icon} className="w-5" alt="wishlist" />
-          {wishlistItems?.length > 0 && (
+          {wishlistItems?.length > -1 && (
             <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-pink-500 text-white aspect-square rounded-full text-[8px]">
               {wishlistItems.length}
             </p>

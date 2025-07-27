@@ -21,7 +21,7 @@ function CartTotal() {
         <hr />
         <div className='flex justify-between'>
           <p>Shipping Fees</p>
-          <p>*Only Applied on orders below ₹500</p>
+          <p>*Only Applied on orders below ₹1000</p>
           <p>{currency} {delivery_fee}.00</p>
         </div>
         <hr />
