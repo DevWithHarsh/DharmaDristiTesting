@@ -121,5 +121,38 @@ const adminLogin = async (req, res) => {
     }
 };
 
+const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
 
-export { loginUser, registerUser, adminLogin, addWishlist,getWishlist,removeWishlist }
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    return res.json({ success: false, message: 'User not found' });
+  }
+
+  // 🛠 Debug logs (optional for development)
+  console.log("Saved OTP:", user.resetOTP);
+  console.log("Entered OTP:", otp);
+  console.log("Expires At:", user.resetOTPExpires);
+  console.log("Current Time:", new Date());
+
+  // ✅ Here's the condition you asked about:
+  if (
+    user.resetOTP !== otp ||                  // OTP mismatch
+    user.resetOTPExpires < new Date()        // OTP expired
+  ) {
+    return res.json({ success: false, message: 'Invalid or expired OTP' });
+  }
+
+  // ✅ Proceed to update password
+  const hashed = await bcrypt.hash(newPassword, 10);
+  user.password = hashed;
+  user.resetOTP = null;
+  user.resetOTPExpires = null;
+  await user.save();
+
+  res.json({ success: true, message: 'Password reset successful' });
+};
+
+
+export { loginUser, registerUser, adminLogin, addWishlist,getWishlist,removeWishlist, resetPassword }

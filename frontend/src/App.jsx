@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Wishlist from './pages/Wishlist'
 import OurPolicy from './components/OurPolicy'
+import ForgotPassword from './pages/Frontend'
 
 const App = () => {
   return (
@@ -24,7 +25,7 @@ const App = () => {
       {/* ToastContainer should be outside main layout to catch global toasts */}
       <ToastContainer position="top-center" autoClose={2000} />
 
-      <div className="min-h-screen flex flex-col bg-[#f8eddf] px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+      <div className="min-h-screen flex flex-col bg-white px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
         <Navbar />
         <SearchBar />
         <Routes>
@@ -40,6 +41,7 @@ const App = () => {
           <Route path='/orders' element={<Orders />} />
           <Route path='/wishlist' element={<Wishlist />} />
           <Route path="/privacy" element={<OurPolicy />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
         <Footer />
       </div>
