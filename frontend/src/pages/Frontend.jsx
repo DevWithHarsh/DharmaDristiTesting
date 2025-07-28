@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 
 const ForgotPassword = () => {
@@ -10,24 +10,41 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1);
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const navigate = useNavigate(); // 👈 Add this
 
   const handleSendOTP = async () => {
-    const res = await axios.post(`${backendUrl}/api/user/forgot-password`, { email });
-    if (res.data.success) {
-      toast.success(res.data.message);
-      setStep(2);
-    } else {
-      toast.error(res.data.message);
+    try {
+      const res = await axios.post(`${backendUrl}/api/user/forgot-password`, { email });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setStep(2);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      toast.error("Something went wrong while sending OTP.");
+      console.log(err);
     }
   };
 
   const handleResetPassword = async () => {
-    const res = await axios.post(`${backendUrl}/api/user/reset-password`, { email, otp, newPassword });
-    if (res.data.success) {
-      toast.success(res.data.message);
-      setStep(1);
-    } else {
-      toast.error(res.data.message);
+    try {
+      const res = await axios.post(`${backendUrl}/api/user/reset-password`, { email, otp, newPassword });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setStep(1);
+        setEmail('');
+        setOtp('');
+        setNewPassword('');
+        setTimeout(() => {
+          navigate('/login'); // 👈 Redirect to login after 1.5s
+        }, 0);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      toast.error("Something went wrong while resetting password.");
+      console.log(err);
     }
   };
 
