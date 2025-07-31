@@ -47,8 +47,12 @@ const ForgotPassword = () => {
       console.log(err);
     }
   };
+  const onSubmitHandler = async (event) => {
+    handleResetPassword();
+  };
 
   return (
+
     <div className="flex flex-col items-center w-full max-w-sm m-auto mt-20">
       {step === 1 ? (
         <>
@@ -64,8 +68,9 @@ const ForgotPassword = () => {
           </button>
         </>
       ) : (
-        <>
+        <form onSubmit={onSubmitHandler}>
           <input
+            required
             type="text"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
@@ -73,16 +78,20 @@ const ForgotPassword = () => {
             className="border p-2 w-full mb-4"
           />
           <input
+            required
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="New Password"
             className="border p-2 w-full mb-4"
           />
-          <button onClick={handleResetPassword} className="bg-black text-white px-4 py-2">
-            Reset Password
-          </button>
-        </>
+          <div className="flex justify-center">
+            <button type='submit' className="bg-black text-white px-4 py-2">
+              Reset Password
+            </button>
+          </div>
+        </form>
+
       )}
     </div>
   );
