@@ -7,28 +7,38 @@ import userRouter from './routes/userRoute.js'
 import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
-import cartRoutes from './routes/cartRoute.js';
+import dashboardRoutes from './routes/dashboardRoutes.js'
+import reviewRouter from './routes/reviewRoute.js'
+import couponRouter from './routes/couponCodeRoute.js';
 
-//App Config
 const app = express()
 const port = process.env.PORT || 4000
+
+// Connect DB + Cloudinary
 connectDB()
 connectCloudinary()
 
-//middlewares
+// Middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:5174"], // admin frontend ports
+  credentials: true
+}))
 
-// api endpoints
-app.use('/api/user',userRouter)
-app.use('/api/product',productRouter)
-app.use('/api/cart',cartRouter)
-app.use('/api/order',orderRouter)
-app.use('/api/product', productRouter);
-app.use('/api/cart', cartRoutes);
+// API Routes
+app.use('/api/user', userRouter)
+app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/order', orderRouter)
+app.use('/api/admin', dashboardRoutes)
+app.use('/api/review', reviewRouter)
+app.use('/api/coupon', couponRouter);
 
-app.get('/',(req,res)=>{
-    res.send("API Working")
+app.get('/', (req, res) => {
+  res.send("API Working ✅")
 })
 
-app.listen(port, ()=> console.log('Server started on PORT : '+ port))
+// Start server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`)
+})

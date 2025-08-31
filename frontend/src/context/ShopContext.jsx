@@ -7,7 +7,7 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
   const currency = '₹';
-  let delivery_fee = 80;
+  let delivery_fee = 0;
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [search, setSearch] = useState('');
@@ -17,6 +17,10 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState('')
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
+  
+  // Coupon related state
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
 
   const addToWishlist = async itemId => {
     if (!wishlistItems.includes(itemId)) {
@@ -41,7 +45,6 @@ const ShopContextProvider = (props) => {
     if (res.data.success) setWishlistItems(res.data.wishlist);
   };
 
-
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems);
     if (cartData[itemId]) {
@@ -51,6 +54,13 @@ const ShopContextProvider = (props) => {
     }
     setCartItems(cartData);
 
+    // Reset coupon when cart changes
+    if (appliedCoupon) {
+      setAppliedCoupon(null);
+      setCouponDiscount(0);
+      toast.info("Coupon removed due to cart changes");
+    }
+
     if (token) {
       try {
         await axios.post(backendUrl + '/api/cart/add', { itemId }, { headers: { token } })
@@ -59,7 +69,6 @@ const ShopContextProvider = (props) => {
         toast.error(error.message)
       }
     }
-
   };
 
   const getCartCount = () => {
@@ -83,8 +92,16 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  let subtotal = getCartAmount();
-  if (subtotal >= 1000) {
+  // Get cart amount after coupon discount
+  const getCartAmountAfterDiscount = () => {
+    const originalAmount = getCartAmount();
+    return originalAmount - couponDiscount;
+  };
+
+  let subtotal = getCartAmountAfterDiscount();
+  if (getCartAmount() < 1000) { // Only apply shipping for orders below ₹1000
+    delivery_fee = 80;
+  } else {
     delivery_fee = 0;
   }
 
@@ -97,6 +114,13 @@ const ShopContextProvider = (props) => {
     let cartData = structuredClone(cartItems);
     cartData[itemID] = quantity;
     setCartItems(cartData);
+
+    // Reset coupon when cart changes
+    if (appliedCoupon) {
+      setAppliedCoupon(null);
+      setCouponDiscount(0);
+      toast.info("Coupon removed due to cart changes");
+    }
 
     if (token) {
       try {
@@ -113,17 +137,46 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // Apply coupon function
+  const applyCoupon = async (couponCode) => {
+    try {
+      const response = await axios.post(
+        `${backendUrl}/api/coupon/apply`,
+        { 
+          code: couponCode,
+          cartItems,
+          userId: token 
+        },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        setAppliedCoupon(response.data.coupon);
+        setCouponDiscount(response.data.coupon.discountAmount);
+        return { success: true, message: response.data.message };
+      } else {
+        return { success: false, message: response.data.message };
+      }
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: error?.response?.data?.message || "Failed to apply coupon" };
+    }
+  };
+
+  // Remove coupon function
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponDiscount(0);
+  };
 
   const getProductsData = async () => {
     try {
-
       const response = await axios.get(backendUrl + '/api/product/list')
       if (response.data.success) {
         setProducts(response.data.products)
       } else {
         toast.error(response.data.message)
       }
-
     } catch (error) {
       console.log(error)
       toast.error(error.message)
@@ -150,8 +203,8 @@ const ShopContextProvider = (props) => {
     const localToken = localStorage.getItem("token");
     if (!token && localToken) {
       setToken(localToken);
-      getUserCart(localToken); // ✅ fetch cart on load
-      getUserWishlist(localToken); // ✅ load wishlist
+      getUserCart(localToken);
+      getUserWishlist(localToken);
     }
   }, []);
 
@@ -159,12 +212,19 @@ const ShopContextProvider = (props) => {
     products, currency, delivery_fee,
     search, setSearch, showSearch, setShowSearch,
     cartItems, setCartItems, addToCart,
-    getCartCount, updateQuantity, getCartAmount,
+    getCartCount, updateQuantity, getCartAmount, getCartAmountAfterDiscount,
     navigate, backendUrl,
     setToken, token,
     wishlistItems,
     addToWishlist,
     removeFromWishlist,
+    // Coupon related functions and state
+    appliedCoupon,
+    couponDiscount,
+    applyCoupon,
+    removeCoupon,
+    setAppliedCoupon,
+    setCouponDiscount
   };
 
   return (

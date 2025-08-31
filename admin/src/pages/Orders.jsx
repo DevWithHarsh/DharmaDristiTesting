@@ -1,3 +1,4 @@
+// admin/src/pages/Orders.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl, currency } from "../App";
@@ -9,16 +10,11 @@ const Orders = ({ token }) => {
 
   const fetchAllOrders = async () => {
     if (!token) return;
-
     try {
       const response = await axios.post(
         backendUrl + "/api/order/list",
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data.success) {
         setOrders(response.data.orders.reverse());
@@ -42,7 +38,7 @@ const Orders = ({ token }) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(response.data.message);
+      toast.error(error.message);
     }
   };
 
@@ -71,7 +67,7 @@ const Orders = ({ token }) => {
 
   return (
     <div className="px-4 py-6 sm:px-8 lg:px-16 bg-gray-50 min-h-screen">
-      <h3 className="text-3xl font-bold mb-6 text-gray-800">Order Page</h3>
+      <h3 className="text-3xl font-bold mb-6 text-gray-800">Admin Orders</h3>
       <div className="space-y-6">
         {orders.map((order, index) => (
           <div
@@ -84,6 +80,7 @@ const Orders = ({ token }) => {
               alt="parcel"
             />
 
+            {/* Customer + Address */}
             <div className="text-sm text-gray-700">
               <div className="space-y-1">
                 {order.items.map((item, i) => (
@@ -108,6 +105,7 @@ const Orders = ({ token }) => {
               </p>
             </div>
 
+            {/* Order Info */}
             <div className="text-sm text-gray-700 space-y-1">
               <p>🧾 Items: {order.items.length}</p>
               <p>💳 Method: {order.paymentMethod}</p>
@@ -150,11 +148,13 @@ const Orders = ({ token }) => {
               <p>📅 Date: {new Date(order.date).toLocaleDateString()}</p>
             </div>
 
+            {/* Amount */}
             <p className="text-xl font-bold text-gray-800 self-center">
               {currency}
               {order.amount}
             </p>
 
+            {/* Status Dropdown + Delete */}
             <select
               onChange={(event) => statusHandler(event, order._id)}
               value={order.status}
@@ -166,6 +166,7 @@ const Orders = ({ token }) => {
               <option value="Out for Delivery">Out for Delivery</option>
               <option value="Delivered">Delivered</option>
             </select>
+
             <p
               onClick={() => deleteOrder(order._id)}
               className="text-red-500 hover:text-red-600 font-bold text-xl cursor-pointer text-right md:text-center"

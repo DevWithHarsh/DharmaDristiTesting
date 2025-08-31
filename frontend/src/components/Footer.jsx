@@ -41,7 +41,7 @@ const Footer = () => {
             <div>
                 <hr />
                 <p className='py-5 text-sm text-center'>
-                    Copyright 2025@ dharmadristi.com - ALL Right Resereved.
+                    Copyright 2025@ dharmadridti.com - ALL Right Resereved.
                 </p>
             </div>
         </div>

@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     resetOTPExpires: { type: Date },
 }, { minimize: false })
 
-const userModel = mongoose.model.user || mongoose.model('user', userSchema);
+// ✅ Correct way
+const userModel = mongoose.models.user || mongoose.model('user', userSchema);
 
 export default userModel;
