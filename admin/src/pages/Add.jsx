@@ -16,7 +16,6 @@ const Add = ({ token }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [cost, setCost] = useState(''); // <-- Add this line
 
   const [category, setCategory] = useState('Puja Samagri'); // or any valid category from the updated list
 
@@ -83,12 +82,12 @@ const Add = ({ token }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+
     try {
       const formData = new FormData();
       formData.append('name', name);
       formData.append('description', description);
       formData.append('price', price);
-      formData.append('cost', cost); // <-- Add this line
       formData.append('category', category);
       formData.append('subCategory', subCategory);
       formData.append('bestseller', bestseller);
@@ -115,7 +114,6 @@ const Add = ({ token }) => {
         setName('');
         setDescription('');
         setPrice('');
-        setCost(''); // <-- Add this line
         setImage1(false);
         setImage2(false);
         setImage3(false);
@@ -236,18 +234,6 @@ const Add = ({ token }) => {
             className="px-3 py-2 border w-[120px]"
             type="number"
             placeholder="25"
-            required
-          />
-        </div>
-        {/* Cost */}
-        <div>
-          <p className="mb-2">Product Cost</p>
-          <input
-            onChange={(e) => setCost(e.target.value)}
-            value={cost}
-            className="px-3 py-2 border w-[120px]"
-            type="number"
-            placeholder="15"
             required
           />
         </div>

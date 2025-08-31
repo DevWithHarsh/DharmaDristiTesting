@@ -137,12 +137,12 @@ const Login = () => {
             Login Here
           </button>
         )}
-        <p
+        <button
           onClick={() => navigate('/forgot-password')}
-          className="text-sm cursor-pointer underline mt-3 text-blue-500"
+          className="text-sm cursor-pointer mt-3"
         >
-          Forgot Password?
-        </p>
+          Forgot Password
+        </button>
       </div>
 
       <button className="bg-black text-white font-light px-8 py-2 mt-4">

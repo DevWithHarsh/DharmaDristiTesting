@@ -1,9 +1,9 @@
 import orderModel from '../models/orderModel.js'
 import productModel from '../models/productModel.js';
 import userModel from '../models/userModel.js';
-import { incrementCouponUsage } from './couponController.js';
 import razorpay from 'razorpay';
 import crypto from 'crypto';
+
 
 const razorpayInstance = new razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -12,46 +12,19 @@ const razorpayInstance = new razorpay({
 
 const placeOrder = async (req, res) => {
     try {
-        const { items, amount, address, paymentMethod, couponCode, couponDiscount, originalAmount, couponType } = req.body;
+        const { items, amount, address, paymentMethod } = req.body;
         const userId = req.body.userId;
-
-        // Debug: Log entire request body
-        console.log('Full request body:', JSON.stringify(req.body, null, 2));
-        console.log('Received couponType specifically:', couponType);
-        console.log('Type of couponType:', typeof couponType);
-
-        // Validate couponType if provided
-        let validCouponType = null;
-        if (couponType) {
-            if (['percentage', 'fixed'].includes(couponType)) {
-                validCouponType = couponType;
-                console.log('Valid couponType set to:', validCouponType);
-            } else {
-                console.log('Invalid couponType received:', couponType);
-                // Set to null if invalid value is received
-                validCouponType = null;
-            }
-        }
 
         const newOrder = new orderModel({
             userId,
             items,
             amount,
-            originalAmount: originalAmount || amount,
             address,
             paymentMethod,
-            payment: paymentMethod !== 'cod',
-            couponCode: couponCode || null,
-            couponDiscount: couponDiscount || 0,
-            couponType: validCouponType // Use validated coupon type
+            payment: paymentMethod !== 'cod'
         });
 
         await newOrder.save();
-
-        // Increment coupon usage count if coupon was used
-        if (couponCode) {
-            await incrementCouponUsage(couponCode);
-        }
 
         // Reduce stock for each item
         for (const item of items) {
@@ -66,55 +39,29 @@ const placeOrder = async (req, res) => {
         res.json({ success: true, message: "Order Placed" });
 
     } catch (error) {
-        console.log('Order placement error:', error);
+        console.log(error);
         res.json({ success: false, message: error.message });
     }
 };
 
+
 // Placing orders using razorpay
 const placeOrderRazorpay = async (req, res) => {
     try {
-        const { items, amount, address, paymentMethod, couponCode, couponDiscount, originalAmount, couponType } = req.body;
+        const { items, amount, address, paymentMethod } = req.body;
         const userId = req.body.userId;
-
-        // Debug: Log entire request body
-        console.log('Full Razorpay request body:', JSON.stringify(req.body, null, 2));
-        console.log('Received couponType for Razorpay specifically:', couponType);
-        console.log('Type of couponType for Razorpay:', typeof couponType);
-
-        // Validate couponType if provided
-        let validCouponType = null;
-        if (couponType) {
-            if (['percentage', 'fixed'].includes(couponType)) {
-                validCouponType = couponType;
-                console.log('Valid Razorpay couponType set to:', validCouponType);
-            } else {
-                console.log('Invalid Razorpay couponType received:', couponType);
-                // Set to null if invalid value is received
-                validCouponType = null;
-            }
-        }
 
         const newOrder = new orderModel({
             userId,
             items,
             amount,
-            originalAmount: originalAmount || amount,
             address,
             paymentMethod: "Razorpay",
             payment: false,
-            date: Date.now(),
-            couponCode: couponCode || null,
-            couponDiscount: couponDiscount || 0,
-            couponType: validCouponType // Use validated coupon type
+            date: Date.now()
         });
 
         await newOrder.save();
-
-        // Increment coupon usage count if coupon was used
-        if (couponCode) {
-            await incrementCouponUsage(couponCode);
-        }
 
         // Reduce stock for each item
         for (const item of items) {
@@ -128,13 +75,11 @@ const placeOrderRazorpay = async (req, res) => {
 
         // Create Razorpay order
         const options = {
-            amount: amount * 100, // Amount in paise (after discount)
+            amount: amount * 100, // Amount in paise
             currency: "INR",
             receipt: `receipt_${newOrder._id}`,
             notes: {
-                orderId: newOrder._id.toString(),
-                couponCode: couponCode || 'none',
-                originalAmount: originalAmount || amount
+                orderId: newOrder._id.toString()
             }
         };
 
@@ -147,8 +92,9 @@ const placeOrderRazorpay = async (req, res) => {
             orderId: newOrder._id
         });
 
+
     } catch (error) {
-        console.log('Razorpay order error:', error);
+        console.log(error);
         res.json({ success: false, message: error.message });
     }
 }
@@ -195,8 +141,7 @@ const allOrders = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 }
-
-// User Order Data for frontend
+// User Order Data for forntend
 const userOrders = async (req, res) => {
     try {
         const { userId } = req.body
@@ -206,9 +151,9 @@ const userOrders = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message })
+
     }
 }
-
 // update order status from admin panel
 const updateStatus = async (req, res) => {
     try {

@@ -196,7 +196,6 @@ function Collection() {
                 id={item._id}
                 price={item.price}
                 image={Array.isArray(item.image) ? item.image[0] : item.image}
-                stock={item.stock}
               />
             ))
           }

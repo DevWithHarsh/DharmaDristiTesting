@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { assets } from '../assets/assets';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 
 const Navbar = () => {
@@ -19,6 +19,7 @@ const Navbar = () => {
     setShowProfileMenu(false);
   };
 
+
   // Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,24 +32,33 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-between py-5 px-4 sm:px-8 font-medium">
-      {/* Logo */}
+    <div className="flex items-center justify-between py-5 font-medium">
       <Link to="/">
-        <img src={assets.logo} className="w-32 sm:w-36" alt="logo" />
+        <img src={assets.logo} className="w-36" alt="logo" />
       </Link>
 
-      {/* Desktop Nav */}
       <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
-        <NavLink to="/" className="hover:text-[#c95c2d]">Home</NavLink>
-        <NavLink to="/categories" className="hover:text-[#c95c2d]">Categories</NavLink>
-        <NavLink to="/shop" className="hover:text-[#c95c2d]">Shop</NavLink>
-        <NavLink to="/about" className="hover:text-[#c95c2d]">About</NavLink>
-        <NavLink to="/contact" className="hover:text-[#c95c2d]">Contact</NavLink>
+        <NavLink to="/" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Home</p>
+        </NavLink>
+        <NavLink to="/categories" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Categories</p>
+        </NavLink>
+        <NavLink to="/shop" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Shop</p>
+        </NavLink>
+        <NavLink to="/about" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">About</p>
+        </NavLink>
+        <NavLink to="/contact" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Contact</p>
+        </NavLink>
+        <NavLink to="/orders" className="flex flex-col items-center gap-1">
+          <p className="hover:text-[#c95c2d]">Orders</p>
+        </NavLink>
       </ul>
 
-      {/* Right Side Icons */}
       <div className="flex items-center gap-6">
-        {/* Search */}
         <img
           onClick={() => setShowSearch(true)}
           src={assets.search_icon}
@@ -69,8 +79,8 @@ const Navbar = () => {
           />
 
           {token && showProfileMenu && (
-            <div className="absolute right-0 pt-4 z-20">
-              <div className="flex flex-col gap-2 w-40 py-3 px-5 bg-slate-100 text-gray-600 rounded shadow-md">
+            <div className="absolute right-0 pt-4 z-10">
+              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md">
                 <p
                   onClick={() => {
                     navigate('/orders');
@@ -79,24 +89,6 @@ const Navbar = () => {
                   className="cursor-pointer hover:text-[#c95c2d]"
                 >
                   Orders
-                </p>
-                <p
-                  onClick={() => {
-                    navigate('/write-review');
-                    setShowProfileMenu(false);
-                  }}
-                  className="cursor-pointer hover:text-[#c95c2d]"
-                >
-                  Write Review
-                </p>
-                <p
-                  onClick={() => {
-                    navigate('/my-reviews');
-                    setShowProfileMenu(false);
-                  }}
-                  className="cursor-pointer hover:text-[#c95c2d]"
-                >
-                  My Reviews
                 </p>
                 <p
                   onClick={logout}
@@ -109,25 +101,21 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Cart */}
         <Link to="/cart" className="relative">
           <img src={assets.cart_icon} className="w-5 min-w-5" alt="cart" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white rounded-full text-[8px]">
+          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
             {getCartCount()}
           </p>
         </Link>
-
-        {/* Wishlist */}
         <Link to="/wishlist" className="relative">
           <img src={assets.heart_icon} className="w-5" alt="wishlist" />
-          {wishlistItems?.length > 0 && (
-            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-pink-500 text-white rounded-full text-[8px]">
+          {wishlistItems?.length > -1 && (
+            <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-pink-500 text-white aspect-square rounded-full text-[8px]">
               {wishlistItems.length}
             </p>
           )}
         </Link>
 
-        {/* Mobile Menu Icon */}
         <img
           onClick={() => setVisible(true)}
           src={assets.menu_icon}
@@ -137,12 +125,11 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Sidebar */}
-      {/* Mobile Sidebar */}
       <div
-        className={`absolute top-0 right-0 bottom-0 bg-[#ffff] transition-all duration-300 
-    ${visible ? 'w-3/4' : 'w-0'} sm:hidden z-30 overflow-hidden`}
+        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-[#f8eddf] transition-all ${visible ? 'w-full' : 'w-0'
+          } sm:hidden`}
       >
-        <div className="flex flex-col text-gray-600 h-full">
+        <div className="flex flex-col text-gray-600">
           <div
             onClick={() => setVisible(false)}
             className="flex items-center gap-4 p-3 cursor-pointer"
@@ -150,56 +137,50 @@ const Navbar = () => {
             <img className="h-4 rotate-180" src={assets.dropdown_icon} alt="" />
             <p>Back</p>
           </div>
-          <NavLink 
-            onClick={() => setVisible(false)} 
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
             to="/"
-            className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-          >Home</NavLink>
-          <NavLink 
-            onClick={() => setVisible(false)} 
+          >
+            Home
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
             to="/categories"
-            className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-          >Categories</NavLink>
-          <NavLink 
-            onClick={() => setVisible(false)} 
+          >
+            Categories
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
             to="/shop"
-            className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-          >Shop</NavLink>
-          <NavLink 
-            onClick={() => setVisible(false)} 
+          >
+            Shop
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
             to="/about"
-            className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-          >About</NavLink>
-          <NavLink 
-            onClick={() => setVisible(false)} 
+          >
+            About
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
             to="/contact"
-            className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-          >Contact</NavLink>
-
-          {/* Profile options in mobile menu */}
-          {token && (
-            <>
-              <NavLink 
-                onClick={() => setVisible(false)} 
-                to="/orders"
-                className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-              >Orders</NavLink>
-              <NavLink 
-                onClick={() => setVisible(false)} 
-                to="/write-review"
-                className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-              >Write Review</NavLink>
-              <NavLink 
-                onClick={() => setVisible(false)} 
-                to="/my-reviews"
-                className={({ isActive }) => `py-2 pl-6 border cursor-pointer ${isActive ? 'bg-[#c95c2d] text-white' : ''}`}
-              >My Reviews</NavLink>
-              <p onClick={logout} className="py-2 pl-6 border cursor-pointer hover:text-[#c95c2d]">Logout</p>
-            </>
-          )}
+          >
+            Contact
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="py-2 pl-6 border"
+            to="/orders"
+          >
+            Orders
+          </NavLink>
         </div>
       </div>
-
     </div>
   );
 };

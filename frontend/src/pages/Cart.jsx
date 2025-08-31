@@ -4,14 +4,10 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { toast } from "react-toastify";
-import axios from 'axios';
 
 function Cart() {
-  const { products, currency, cartItems, updateQuantity, navigate, backendUrl, token, getCartAmount } = useContext(ShopContext);
+  const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
-  const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     if (products.length > 0) {
@@ -24,49 +20,6 @@ function Cart() {
       setCartData(tempData);
     }
   }, [cartItems, products]);
-
-  const applyCoupon = async () => {
-    if (!couponCode.trim()) {
-      toast.error("Please enter a coupon code");
-      return;
-    }
-
-    if (!token) {
-      toast.error("Please login to apply coupon");
-      return;
-    }
-
-    setCouponLoading(true);
-    try {
-      const response = await axios.post(
-        `${backendUrl}/api/coupon/apply`,
-        {
-          code: couponCode.trim(),
-          cartItems,
-          userId: token
-        },
-        { headers: { token } }
-      );
-
-      if (response.data.success) {
-        setAppliedCoupon(response.data.coupon);
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(error?.response?.data?.message || "Failed to apply coupon");
-    } finally {
-      setCouponLoading(false);
-    }
-  };
-
-  const removeCoupon = () => {
-    setAppliedCoupon(null);
-    setCouponCode('');
-    toast.info("Coupon removed");
-  };
 
   return (
     <div className="border-t pt-14">
@@ -128,52 +81,7 @@ function Cart() {
 
       <div className="flex justify-end my-20">
         <div className="w-full sm:w-[450px]">
-          {/* Coupon Section */}
-          <div className="mb-6 p-4 rounded-lg border border-black-700">
-            <h3 className="text-lg font-medium mb-3">Have a Coupon Code?</h3>
-
-            {!appliedCoupon ? (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                  placeholder="Enter coupon code"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md uppercase"
-                  maxLength="20"
-                />
-                <button
-                  onClick={applyCoupon}
-                  disabled={couponLoading}
-                  className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50"
-                >
-                  {couponLoading ? 'Applying...' : 'Apply'}
-                </button>
-              </div>
-            ) : (
-              <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold text-green-800">Coupon Applied: {appliedCoupon.code}</p>
-                    <p className="text-sm text-green-600">
-                      Discount: {appliedCoupon.discountType === 'percentage'
-                        ? `${appliedCoupon.discountValue}%`
-                        : `${currency}${appliedCoupon.discountValue}`}
-                      = {currency}{appliedCoupon.discountAmount}
-                    </p>
-                  </div>
-                  <button
-                    onClick={removeCoupon}
-                    className="text-red-500 hover:text-red-700 font-medium text-sm"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <CartTotal appliedCoupon={appliedCoupon} />
+          <CartTotal />
           <div className="w-full text-end">
             <button
               onClick={() => {
@@ -182,16 +90,7 @@ function Cart() {
                   toast.error("Please login before placing an order.");
                   navigate("/login");
                 } else {
-                  // Pass coupon data to checkout
-                  navigate("/place-order", {
-                    state: {
-                      appliedCoupon,
-                      discountedTotal:
-                        (getCartAmount() - (appliedCoupon?.discountAmount || 0)),
-                      couponDiscount: appliedCoupon?.discountAmount || 0,
-                      couponCode: appliedCoupon?.code || null
-                    }
-                  });
+                  navigate("/place-order");
                 }
               }}
               className="bg-black text-sm my-8 px-8 py-3 text-white"

@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const ProductItem = ({ id, image, name, price, stock }) => { // <-- add stock prop
+const ProductItem = ({ id, image, name, price }) => {
   const { addToCart } = useContext(ShopContext);
   const navigate = useNavigate();
   const { addToWishlist, removeFromWishlist, wishlistItems } = useContext(ShopContext);
@@ -34,23 +34,16 @@ const ProductItem = ({ id, image, name, price, stock }) => { // <-- add stock pr
         <p className="text-sm text-gray-600 my-2 text-center">₹{price}</p>
       </Link>
 
-      {stock > 0 ? (
-        <button
-          onClick={(e) => {
-            e.stopPropagation(); // stop the click from going to parent <Link>
-            e.preventDefault();  // prevent default <a> link behavior
-            handleBuyNow();      // call your function
-          }}
-          className="bg-[#9b4c3c] text-white w-full py-2 rounded-md hover:bg-[#823c2e] mt-auto"
-        >
-          Buy Now
-        </button>
-      ) : (
-        <div className="w-full py-2 mt-auto text-center text-red-600 font-semibold">
-          Out of Stock
-        </div>
-      )}
-
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // stop the click from going to parent <Link>
+          e.preventDefault();  // prevent default <a> link behavior
+          handleBuyNow();      // call your function
+        }}
+        className="bg-[#9b4c3c] text-white w-full py-2 rounded-md hover:bg-[#823c2e] mt-auto"
+      >
+        Buy Now
+      </button>
       <button onClick={() =>
         isWishlisted ? removeFromWishlist(id) : addToWishlist(id)
       }>
