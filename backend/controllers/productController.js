@@ -4,7 +4,7 @@ import productModel from "../models/productModel.js";
 // function for add product 
 const addProduct = async (req, res) => {
     try {
-        const { name, description, price, category, subCategory, bestseller } = req.body;
+        const { name, description, price, cost, category, subCategory, bestseller } = req.body; // <-- Add cost here
 
         // Correct way to access files using optional chaining
         const image1 = req.files.image1 && req.files.image1[0]
@@ -26,6 +26,7 @@ const addProduct = async (req, res) => {
             description,
             category,
             price: Number(price),
+            cost: Number(cost), // <-- Add this line
             subCategory,
             bestseller: bestseller === "true" ? true : false,
             image: imageUrl,
@@ -112,7 +113,7 @@ const removeStock = async (req, res) => {
         const product = await productModel.findById(id);
         if (!product) return res.json({ success: false, message: "Product not found" });
 
-        product.stock = Math.max((product.stock || 0) - Number(quantity), 0);
+        product.stock = Math.max((product.stock || 0    ) - Number(quantity), 0);
         await product.save();
 
         res.json({ success: true, message: "Stock removed successfully", stock: product.stock });
