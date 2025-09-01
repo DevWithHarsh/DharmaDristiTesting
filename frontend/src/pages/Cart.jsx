@@ -104,14 +104,24 @@ function Cart() {
               </div>
 
               <input
-                onChange={(e) =>
-                  e.target.value === '' || e.target.value === '0'
-                    ? null
-                    : updateQuantity(item._id, Number(e.target.value))
-                }
+                onChange={(e) => {
+                  if (e.target.value === '' || e.target.value === '0') {
+                    return null;
+                  }
+                  const newQuantity = Number(e.target.value);
+                  const product = products.find(p => p._id === item._id);
+                  if (product && newQuantity > product.stock) {
+                    toast.error(`Only ${product.stock} units available`);
+                    e.target.value = product.stock;
+                    updateQuantity(item._id, product.stock);
+                  } else {
+                    updateQuantity(item._id, newQuantity);
+                  }
+                }}
                 className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
                 type="number"
                 min={1}
+                max={products.find(p => p._id === item._id)?.stock || 1}
                 defaultValue={item.quantity}
               />
 
@@ -181,8 +191,26 @@ function Cart() {
                 if (!token) {
                   toast.error("Please login before placing an order.");
                   navigate("/login");
-                } else {
-                  // Pass coupon data to checkout
+                  return;
+                }
+
+                // Check stock availability for all items in cart
+                let hasStockIssue = false;
+                for (const items in cartItems) {
+                  if (cartItems[items] > 0) {
+                    const product = products.find(p => p._id === items);
+                    if (product) {
+                      if (product.stock < cartItems[items]) {
+                        toast.error(`Only ${product.stock} units available for ${product.name}`);
+                        hasStockIssue = true;
+                        break;
+                      }
+                    }
+                  }
+                }
+
+                if (!hasStockIssue) {
+                  // If stock is available, proceed to checkout
                   navigate("/place-order", {
                     state: {
                       appliedCoupon,

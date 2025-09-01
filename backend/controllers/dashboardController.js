@@ -201,12 +201,19 @@ const generateProfitChartData = async () => {
                 status: { $nin: ['cancelled', 'refunded'] }
             });
 
-            const revenue = weekOrders.reduce((sum, order) => sum + (order.amount || 0), 0); // Use amount field
-            const profit = revenue * 0.3;
+            let weeklyProfit = 0;
+            for (const order of weekOrders) {
+                for (const item of order.items) {
+                    const product = await Product.findById(item._id || item.productId);
+                    if (product) {
+                        weeklyProfit += ((product.price - product.cost) * (item.quantity || 1));
+                    }
+                }
+            }
 
             weeks.push({
                 name: `Week ${4 - i}`,
-                profit
+                profit: weeklyProfit
             });
         }
 

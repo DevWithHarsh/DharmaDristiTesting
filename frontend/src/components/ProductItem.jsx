@@ -34,7 +34,7 @@ const ProductItem = ({ id, image, name, price, stock }) => { // <-- add stock pr
         <p className="text-sm text-gray-600 my-2 text-center">₹{price}</p>
       </Link>
 
-      {stock > 0 ? (
+      {stock > 1 ? (
         <button
           onClick={(e) => {
             e.stopPropagation(); // stop the click from going to parent <Link>

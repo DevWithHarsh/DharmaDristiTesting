@@ -153,10 +153,10 @@ const Dashboard = () => {
               <BarChart data={dashboardData.profitData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip formatter={(value) => [formatCurrency(value), 'Profit']} />
+                <YAxis tickFormatter={(value) => `₹${value}`} />
+                <Tooltip formatter={(value) => [formatCurrency(value), 'Weekly Profit']} />
                 <Legend />
-                <Bar dataKey="profit" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="profit" name="Profit" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>

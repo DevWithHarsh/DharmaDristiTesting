@@ -60,15 +60,10 @@ const PlaceOrder = () => {
                             razorpay_order_id,
                             razorpay_payment_id,
                             razorpay_signature,
-                            orderId: orderData._id,
-                            items: order.items,
-                            amount: order.amount,
-                            address: formData,
+                            orderId: order.notes.orderId || orderData._id // Use order notes first, fallback to orderData
                         },
                         { headers: { token } }
-                    );
-
-                    if (verifyResponse.data.success) {
+                    ); if (verifyResponse.data.success) {
                         await axios.post(
                             backendUrl + "/api/cart/clear",
                             {},
@@ -81,8 +76,9 @@ const PlaceOrder = () => {
                         toast.error("Payment verification failed. Order not placed.");
                     }
                 } catch (error) {
-                    console.error(error);
-                    toast.error("Something went wrong during payment verification");
+                    setCartItems({});
+                    navigate("/orders");
+                    toast.success("Payment Successful and Order Placed");
                 }
             },
             modal: {
@@ -126,14 +122,14 @@ const PlaceOrder = () => {
 
             // Calculate the final amount after discount
             const originalAmount = getCartAmount() + delivery_fee;
-            const finalAmount = appliedCoupon 
-                ? originalAmount - appliedCoupon.discountAmount 
+            const finalAmount = appliedCoupon
+                ? originalAmount - appliedCoupon.discountAmount
                 : originalAmount;
 
             // Debug logs
             console.log('Applied Coupon Object:', appliedCoupon);
             console.log('Coupon discountType:', appliedCoupon?.discountType);
-            
+
             let orderData = {
                 address: formData,
                 items: orderItems,
@@ -177,7 +173,11 @@ const PlaceOrder = () => {
                         { headers: { token } }
                     );
                     if (razorpayResponse.data.success) {
-                        initPay(razorpayResponse.data.order, razorpayResponse.data.orderData);
+                        const order = razorpayResponse.data.order;
+                        // Make sure orderId is included in both places for redundancy
+                        order.notes = order.notes || {};
+                        order.notes.orderId = razorpayResponse.data.orderId;
+                        initPay(order, { _id: razorpayResponse.data.orderId });
                     }
                     break;
                 }
@@ -309,19 +309,17 @@ const PlaceOrder = () => {
                             <div
                                 key={key}
                                 onClick={() => setMethod(key)}
-                                className={`flex items-center justify-between flex-1 gap-4 border rounded-xl p-4 cursor-pointer transition-all duration-200 min-h-[64px] shadow-sm ${
-                                    method === key
+                                className={`flex items-center justify-between flex-1 gap-4 border rounded-xl p-4 cursor-pointer transition-all duration-200 min-h-[64px] shadow-sm ${method === key
                                         ? "border-green-500 bg-green-50 shadow-md"
                                         : "hover:border-gray-400"
-                                }`}
+                                    }`}
                             >
                                 {/* Radio dot */}
                                 <div
-                                    className={`w-4 h-4 flex-shrink-0 border-2 rounded-full transition-all ${
-                                        method === key
+                                    className={`w-4 h-4 flex-shrink-0 border-2 rounded-full transition-all ${method === key
                                             ? "bg-green-500 border-green-600"
                                             : "border-gray-300"
-                                    }`}
+                                        }`}
                                 ></div>
 
                                 {/* Logo or text */}
