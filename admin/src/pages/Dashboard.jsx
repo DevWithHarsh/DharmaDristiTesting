@@ -29,7 +29,7 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      const response = await fetch('http://localhost:4000/api/admin/dashboard', { headers });
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin/dashboard`, { headers });
 
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
