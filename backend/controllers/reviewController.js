@@ -239,10 +239,18 @@ const getUserReviews = async (req, res) => {
     const userId = req.body.userId;
 
     const reviews = await reviewModel.find({ userId })
-      .populate('productId', 'name image price')
+      .populate({
+        path: 'productId',
+        select: 'name image price',
+        // This will include reviews even if productId is null
+        options: { strictPopulate: false }
+      })
       .sort({ date: -1 });
 
-    res.json({ success: true, reviews });
+    // Filter out reviews where product is null (deleted products)
+    const validReviews = reviews.filter(review => review.productId);
+
+    res.json({ success: true, reviews: validReviews });
 
   } catch (error) {
     console.log(error);

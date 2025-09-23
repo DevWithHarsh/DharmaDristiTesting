@@ -14,57 +14,52 @@ function Collection() {
 
   // Dynamic Subcategories based on Category
   const subcategoryMap = {
-  "Puja Samagri": [
-    "Roli (Kumkum / Sindoor)", "Haldi", "Chandan", "Akshat", "Ganga Jal", "Rose water", "Honey", "Cow Ghee",
-    "Camphor", "Agarbatti", "Dhoop", "Sambrani Cups", "Cotton Wicks", "Matchbox / Lighter", "Kapoor dani",
-    "Turmeric sticks", "Betel leaves & nut", "Cloves & Cardamom", "Dry coconut", "Red/Yellow thread",
-    "Ashtagandha", "Janeyu", "Panchpatra & Achamani", "Gomutra", "Sacred ash", "Guggul Resin", "Havan samidha",
-    "Havan kund", "Havan spoon & utensils", "Paan leaves", "Cow Dung Cakes"
+  "Antique & Spiritual Collection": [
+    "Radha Krishna Idols & Frames",
+    "Buddha Statues",
+    "Golden/Brass Idols",
+    "Tribal Musician Statues",
+    "Angel & Divine Figures",
+    "Couple & Family Figurines"
   ],
-  "Diya, Lamps & Lighting": [
-    "Mitti Diya", "Brass Diya", "Akhand Diya", "Oil lamps", "LED Electric Diyas", "Diya oils", "Diya accessories"
+  "Showpieces & Décor": [
+    "Horse & Elephant Figurines",
+    "Globe & Antique Models",
+    "Swan Pair & Love Figurines",
+    "Hourglass & Vintage Items",
+    "Evil Eye (Nazar Suraksha) Décor",
+    "Miniature Stools/Tables"
   ],
-  "Mala & Spiritual Jewelry": [
-    "Rudraksha mala", "Rudraksha bracelet", "Tulsi mala", "Sphatik mala", "Chandan mala", "Navratna bracelet/ring",
-    "Gemstone lockets & rings", "Hanuman gada pendant", "Om / Swastik lockets", "Trishul / Damru pendants"
+  "Wall & Home Decoration": [
+    "Wall Paintings & Frames (Tree of Life, Modern, Spiritual)",
+    "Wall Clocks",
+    "Designer Wall Panels & Wallpapers",
+    "Hanging Lights & Ceiling Lamps",
+    "Quote Frames & Motivational Décor"
   ],
-  "Meditation & Healing Items": [
-    "Meditation cushions", "Singing bowls", "Smudging sticks", "Essential oils", "Aroma diffusers", "Chakra stones",
-    "Energy pyramids", "Healing wands", "Pendulums for Reiki"
+  "Soft Furnishings": [
+    "Cushion Covers",
+    "Table Cloths",
+    "Curtains",
+    "Sofa Throws & Mats (future add-ons possible)"
   ],
-  "Yantras & Vastu Items": [
-    "Shri Yantra", "Kuber Yantra", "Vastu Dosh Yantras", "Bagua mirrors", "Brass tortoise", "Pyramid Yantra",
-    "Gomti Chakra", "Cowrie Shells", "Feng Shui items", "Vastu compass", "Surya Yantra", "Hanuman Yantra",
-    "Durga Beesa Yantra", "Vastu Danda", "Sea Salt"
+  "Artificial Flowers & Plants": [
+    "Sunflowers",
+    "Roses & Mixed Flowers",
+    "Decorative Flower Bunches",
+    "Potted Artificial Plants",
+    "Fancy Flower Vases"
   ],
-  "Idols, Photos & Murti": [
-    "Marble idols", "Brass idols", "Panchdhatu idols", "Polyresin idols", "Miniature idols", "Keychain idols",
-    "Photo frames", "Wall posters", "Digital LED frames"
+  "Festive & Pooja Décor": [
+    "Hanging Garlands (Phool Mala, Toran)",
+    "Decorative Diyas & Candle Holders",
+    "Pooja Thalis & Temple Décor Items",
+    "Religious Wall Hangings"
   ],
-  "Religious Literature & Books": [
-    "Bhagavad Gita", "Ramayana", "Hanuman Chalisa", "Sai Satcharitra", "Puranas", "Vedas", "Lal Kitab",
-    "Panchang", "Mantra books", "Bhajan books", "Aarti Sangrah"
-  ],
-  "Natural & Ayurvedic Items": [
-    "Herbal dhoop", "Gaumutra Ark", "Panchagavya Products", "Herbal bath powders", "Neem / Tulsi Soap",
-    "Ayurvedic oils", "Vibhuti", "Ubtan"
-  ],
-  "Temple Accessories": [
-    "Mandirs", "Ghanti", "Puja chowki", "Wooden stools", "Copper lota", "Bell chains", "Hanging diyas",
-    "Puja shelves"
-  ],
-  "Gift Items": [
-    "Festival hampers", "Return gift packs", "Corporate gifts", "Customized spiritual boxes", "Prasad boxes"
-  ],
-  "Festival Specific Items": [
-    "Holi Items", "Diwali Items", "Navratri Items", "Raksha Bandhan Items", "Karva Chauth Items", "Janmashtami Items"
-  ],
-  "Eco-friendly Spiritual Products": [
-    "Cow dung diyas", "Clay Ganesha", "Herbal havan cups", "Biodegradable packaging", "Palm leaf scriptures"
-  ],
-  "Astrology Services & Products": [
-    "Personalized horoscope", "Gemstone recommendation", "Pooja recommendations", "Pooja kits", "Pandit booking",
-    "Astro consultation", "Grah shanti kits"
+  "Interior Designing Services": [
+    "Home Interior Designing",
+    "Office/Shop Designing",
+    "Customized Decoration Solutions"
   ]
 };
 

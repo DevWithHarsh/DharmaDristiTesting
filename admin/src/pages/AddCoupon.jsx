@@ -18,19 +18,13 @@ const AddCoupon = ({ token }) => {
   });
 
   const categories = [
-    "Puja Samagri",
-    "Diya, Lamps & Lighting",
-    "Mala & Spiritual Jewelry",
-    "Meditation & Healing Items",
-    "Yantras & Vastu Items",
-    "Idols, Photos & Murti",
-    "Religious Literature & Books",
-    "Natural & Ayurvedic Items",
-    "Temple Accessories",
-    "Gift Items",
-    "Festival Specific Items",
-    "Eco-friendly Spiritual Products",
-    "Astrology Services & Products"
+    "Antique & Spiritual Collection",
+    "Showpieces & Décor",
+    "Wall & Home Decoration",
+    "Soft Furnishings",
+    "Artificial Flowers & Plants",
+    "Festive & Pooja Décor",
+    "Interior Designing Services"
   ];
 
   const handleInputChange = (e) => {

@@ -26,7 +26,13 @@ const MyReviews = () => {
         { headers: { token } }
       );
       if (response.data.success) {
-        setMyReviews(response.data.reviews);
+        // Filter out reviews with missing or invalid product data
+        const validReviews = response.data.reviews.filter(review => 
+          review.productId && 
+          review.productId.name && 
+          review.productId.price !== undefined
+        );
+        setMyReviews(validReviews);
       } else {
         toast.error(response.data.message);
       }
@@ -113,6 +119,15 @@ const MyReviews = () => {
     );
   };
 
+  // Helper function to get product image safely
+  const getProductImage = (product) => {
+    if (!product || !product.image || !Array.isArray(product.image) || product.image.length === 0) {
+      // Return a placeholder image URL or empty string
+      return '/placeholder-product.png'; // Make sure you have a placeholder image
+    }
+    return product.image[0];
+  };
+
   useEffect(() => {
     fetchMyReviews();
   }, [token]);
@@ -141,14 +156,19 @@ const MyReviews = () => {
               {/* Product Info */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
                 <img
-                  src={review.productId.image[0]}
-                  alt={review.productId.name}
+                  src={getProductImage(review.productId)}
+                  alt={review.productId?.name || 'Product'}
                   className="w-20 h-20 sm:w-16 sm:h-16 object-cover rounded"
+                  onError={(e) => {
+                    e.target.src = '/placeholder-product.png'; // Fallback image
+                  }}
                 />
                 <div className="flex-1">
-                  <h3 className="font-medium text-base sm:text-lg">{review.productId.name}</h3>
+                  <h3 className="font-medium text-base sm:text-lg">
+                    {review.productId?.name || 'Product name unavailable'}
+                  </h3>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    {currency}{review.productId.price}
+                    {currency}{review.productId?.price || 'Price unavailable'}
                   </p>
                   <p className="text-xs sm:text-sm text-gray-500">
                     Reviewed on {new Date(review.date).toLocaleDateString('en-IN')}

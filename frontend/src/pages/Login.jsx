@@ -139,7 +139,7 @@ const Login = () => {
         )}
         <p
           onClick={() => navigate('/forgot-password')}
-          className="text-sm cursor-pointer underline mt-3 text-blue-500"
+          className="text-sm cursor-pointer underline mt-3 text-black"
         >
           Forgot Password?
         </p>
